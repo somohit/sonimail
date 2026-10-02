@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sonimail - Secure Access</title>
+    <style>
+        body {
+            background-color: #070707;
+            color: #d1d1d1;
+            font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        .login-wrapper {
+            width: 100%;
+            max-width: 360px;
+            padding: 40px;
+            text-align: center;
+            animation: fadeIn 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .logo {
+            font-weight: 200;
+            letter-spacing: 6px;
+            margin-bottom: 60px;
+            font-size: 20px;
+            color: #ffffff;
+            text-transform: uppercase;
+        }
+        .input-container {
+            position: relative;
+        }
+        input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid #222;
+            color: #fff;
+            font-size: 16px;
+            padding: 12px 0;
+            outline: none;
+            transition: border-color 0.4s ease, opacity 0.4s ease;
+            text-align: center;
+            letter-spacing: 2px;
+        }
+        input::placeholder {
+            color: #444;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+        input:focus {
+            border-bottom: 1px solid #777;
+        }
+        .fade-transition {
+            opacity: 0;
+            pointer-events: none;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-wrapper">
+        <div class="logo">Sonimail</div>
+        <form id="authForm">
+            <div class="input-container">
+                <input type="text" id="credentialInput" placeholder="Identity" autocomplete="off" required autofocus>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        const form = document.getElementById('authForm');
+        const input = document.getElementById('credentialInput');
+        let currentStep = 'identity'; 
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (currentStep === 'identity' && input.value.trim() !== '') {
+                input.classList.add('fade-transition');
+                
+                setTimeout(() => {
+                    input.type = 'password';
+                    input.value = '';
+                    input.placeholder = 'Passkey';
+                    input.classList.remove('fade-transition');
+                    input.focus();
+                    currentStep = 'passkey';
+                }, 400);
+            } else if (currentStep === 'passkey' && input.value.trim() !== '') {
+                input.classList.add('fade-transition');
+                
+                setTimeout(() => {
+                    input.type = 'text';
+                    input.value = '';
+                    input.placeholder = 'Authenticating...';
+                    input.disabled = true;
+                    input.classList.remove('fade-transition');
+                }, 400);
+            }
+        });
+    </script>
+</body>
+</html>
