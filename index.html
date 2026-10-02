@@ -18,7 +18,6 @@
             position: relative;
         }
         
-        /* 3D Topology Background */
         #topoCanvas {
             position: absolute;
             top: 0;
@@ -29,63 +28,42 @@
             pointer-events: none;
         }
 
-        .login-wrapper {
+        .content-wrapper {
             width: 100%;
-            max-width: 360px;
-            padding: 40px;
             text-align: center;
             position: relative;
             z-index: 10;
             animation: fadeIn 1.2s cubic-bezier(0.25, 1, 0.5, 1);
-            background: rgba(5, 5, 5, 0.6);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(40, 40, 40, 0.5);
-            border-radius: 4px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
         }
 
         .logo {
             font-weight: 200;
-            letter-spacing: 6px;
-            margin-bottom: 60px;
-            font-size: 20px;
+            letter-spacing: 8px;
+            margin-bottom: 25px;
+            font-size: 22px;
             color: #ffffff;
             text-transform: uppercase;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            text-shadow: 0 4px 15px rgba(0,0,0,0.9);
         }
 
-        .input-container {
-            position: relative;
-        }
-
-        input {
-            width: 100%;
+        .access-btn {
             background: transparent;
             border: none;
-            border-bottom: 1px solid #333;
-            color: #fff;
-            font-size: 16px;
-            padding: 12px 0;
-            outline: none;
-            transition: border-color 0.4s ease, opacity 0.4s ease;
-            text-align: center;
-            letter-spacing: 2px;
-        }
-
-        input::placeholder {
-            color: #555;
-            font-size: 12px;
+            color: #666;
+            font-size: 11px;
+            letter-spacing: 4px;
             text-transform: uppercase;
-            letter-spacing: 3px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            outline: none;
+            font-family: inherit;
         }
 
-        input:focus {
-            border-bottom: 1px solid #888;
-        }
-
-        .fade-transition {
-            opacity: 0;
-            pointer-events: none;
+        .access-btn:hover {
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255,255,255,0.4);
+            letter-spacing: 5px;
         }
 
         @keyframes fadeIn {
@@ -97,13 +75,9 @@
 <body>
     <canvas id="topoCanvas"></canvas>
     
-    <div class="login-wrapper">
+    <div class="content-wrapper">
         <div class="logo">Sonimail</div>
-        <form id="authForm">
-            <div class="input-container">
-                <input type="text" id="credentialInput" placeholder="Identity" autocomplete="off" required autofocus>
-            </div>
-        </form>
+        <button id="accessBtn" class="access-btn">Access Mailbox</button>
     </div>
 
     <script>
@@ -147,38 +121,15 @@
         resize();
 
         // --- Auth Redirect Logic ---
-        const form = document.getElementById('authForm');
-        const input = document.getElementById('credentialInput');
-        let currentStep = 'identity'; 
-
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
+        const btn = document.getElementById('accessBtn');
+        btn.addEventListener('click', function() {
+            btn.style.pointerEvents = 'none';
+            btn.style.color = '#fff';
+            btn.textContent = 'Authenticating...';
             
-            if (currentStep === 'identity' && input.value.trim() !== '') {
-                input.classList.add('fade-transition');
-                setTimeout(() => {
-                    input.type = 'password';
-                    input.value = '';
-                    input.placeholder = 'Passkey';
-                    input.classList.remove('fade-transition');
-                    input.focus();
-                    currentStep = 'passkey';
-                }, 400);
-            } else if (currentStep === 'passkey' && input.value.trim() !== '') {
-                input.classList.add('fade-transition');
-                setTimeout(() => {
-                    input.type = 'text';
-                    input.value = '';
-                    input.placeholder = 'Redirecting to secure server...';
-                    input.disabled = true;
-                    input.classList.remove('fade-transition');
-                    
-                    // Redirects to iCloud Mail after 1.5 seconds
-                    setTimeout(() => {
-                        window.location.href = "https://www.icloud.com/mail";
-                    }, 1500);
-                }, 400);
-            }
+            setTimeout(() => {
+                window.location.href = "https://www.icloud.com/mail";
+            }, 800);
         });
     </script>
 </body>
